@@ -83,14 +83,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const button = document.createElement('button');
             button.textContent = answer;
             button.addEventListener('click', (e) => {
-                const selectedAnswer = e.target.textContent;
-                if (selectedAnswer === currentQuestion.correctAnswer) {
-                    score++;
-                    e.target.style.backgroundColor = '#00ff00';
-                    confetti();
-                } else {
-                    e.target.style.backgroundColor = '#ff0000';
+                // Find and highlight the "Yes" button
+                const buttons = answersElement.querySelectorAll('button');
+                const yesButton = Array.from(buttons).find(btn => btn.textContent === 'Yes');
+                if (yesButton) {
+                    yesButton.style.backgroundColor = '#00ff00';
                 }
+                score++;
+                confetti();
                 
                 setTimeout(() => {
                     currentQuestionIndex = (currentQuestionIndex + 1) % quizQuestions.length;
