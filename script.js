@@ -41,8 +41,27 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const instaButton = document.querySelector('.insta-button');
+    const loadingPage = document.getElementById('loading-page');
 
     instaButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        // Show loading page
+        loadingPage.style.display = 'flex';
+        
+        // Start loading animation
+        const loadingCircle = document.querySelector('.loading-circle');
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += 5;
+            loadingCircle.style.background = `conic-gradient(#00ffff ${progress}%, transparent ${progress}%)`;
+            
+            if (progress >= 100) {
+                clearInterval(interval);
+                window.location.href = 'https://www.instagram.com/jannik.nu/';
+            }
+        }, 100);
+
         confetti({
             particleCount: 100,
             spread: 70,
