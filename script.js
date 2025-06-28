@@ -17,30 +17,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    gsap.from('.reason-card', {
-        scrollTrigger: {
-            trigger: '.reasons',
-            start: 'top 80%',
-        },
-        duration: 0.5,
-        y: 50,
-        opacity: 0,
-        stagger: 0.2,
-        ease: 'power2.out'
-    });
+
 
     const factDisplay = document.getElementById('fact-display');
     const factButton = document.getElementById('fact-button');
 
     const jannikFacts = [
-        "Jannik Nu doesn't read books. He stares them down until he gets the information he wants.",
-        "Time doesn't pass for Jannik Nu. He allows it to proceed.",
-        "Jannik Nu's tears can cure any illness. Too bad he has never cried.",
-        "Jannik Nu once taught a rock to fetch. It's now a loyal companion.",
-        "The Great Wall of China was originally built to keep Jannik Nu out. It failed.",
-        "Jannik Nu can unscramble an egg.",
-        "Jannik Nu is the only person to have ever won a staring contest with the sun.",
-        "When Jannik Nu does a pushup, he isn't lifting himself up, he's pushing the Earth down."
+        "Jannik Nu isst keinen Honig. Er kaut Bienen.",
+        "Jannik Nu wirft keinen Schatten. Die Wand will nur so aussehen wie er.",
+        "Jannik Nu schläft nicht. Er wartet.",
+        "Jannik Nu kann Zwiebeln zum Weinen bringen.",
+        "Das Auto von Jannik Nu braucht kein Benzin. Es fährt aus Respekt.",
+        "Jannik Nu ist bereits vor 10 Jahren gestorben. Der Tod hat nur noch nicht den Mut, es ihm zu sagen.",
+        "Jannik Nu hat bis zur Unendlichkeit gezählt. Zweimal.",
+        "Wenn Jannik Nu Liegestütze macht, drückt er nicht sich selbst nach oben, sondern die Erde nach unten."
     ];
 
     factButton.addEventListener('click', () => {
@@ -63,17 +53,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const quizQuestions = [
         {
             question: "Is Jannik Nu cool?",
-            answers: ["Yes", "Of course", "Obviously"],
+            answers: ["Yes", "No"],
             correctAnswer: "Yes"
         },
         {
-            question: "What is the meaning of life?",
-            answers: ["Jannik Nu", "Jannik Nu", "Jannik Nu"],
-            correctAnswer: "Jannik Nu"
+            question: "Does Jannik Nu know how to park a boat?",
+            answers: ["Yes", "No"],
+            correctAnswer: "Yes"
+        },
+        {
+            question: "Is Jannik Nu the meaning of life?",
+            answers: ["Yes", "No"],
+            correctAnswer: "Yes"
         }
     ];
 
     let currentQuestionIndex = 0;
+    let score = 0;
 
     const questionElement = document.getElementById('quiz-question');
     const answersElement = document.getElementById('quiz-answers');
@@ -86,9 +82,20 @@ document.addEventListener('DOMContentLoaded', () => {
         currentQuestion.answers.forEach(answer => {
             const button = document.createElement('button');
             button.textContent = answer;
-            button.addEventListener('click', () => {
-                currentQuestionIndex = (currentQuestionIndex + 1) % quizQuestions.length;
-                loadQuestion();
+            button.addEventListener('click', (e) => {
+                const selectedAnswer = e.target.textContent;
+                if (selectedAnswer === currentQuestion.correctAnswer) {
+                    score++;
+                    e.target.style.backgroundColor = '#00ff00';
+                    confetti();
+                } else {
+                    e.target.style.backgroundColor = '#ff0000';
+                }
+                
+                setTimeout(() => {
+                    currentQuestionIndex = (currentQuestionIndex + 1) % quizQuestions.length;
+                    loadQuestion();
+                }, 1000);
             });
             answersElement.appendChild(button);
         });
