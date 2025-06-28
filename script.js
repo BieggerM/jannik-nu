@@ -43,30 +43,60 @@ document.addEventListener('DOMContentLoaded', () => {
     const instaButton = document.querySelector('.insta-button');
     const loadingPage = document.getElementById('loading-page');
 
+    // Check if returning from Instagram
+    if (sessionStorage.getItem('returningFromInsta')) {
+        loadingPage.style.display = 'none';
+        sessionStorage.removeItem('returningFromInsta');
+    }
+
     instaButton.addEventListener('click', (e) => {
         e.preventDefault();
         
         // Show loading page
         loadingPage.style.display = 'flex';
         
-        // Start loading animation
-        const loadingCircle = document.querySelector('.loading-circle');
-        let progress = 0;
-        const interval = setInterval(() => {
-            progress += 5;
-            loadingCircle.style.background = `conic-gradient(#00ffff ${progress}%, transparent ${progress}%)`;
-            
-            if (progress >= 100) {
-                clearInterval(interval);
-                window.location.href = 'https://www.instagram.com/jannik.nu/';
-            }
-        }, 100);
+        // Create loading container
+        loadingPage.innerHTML = `
+            <div class="loading-grid">
+                <div class="loading-row">
+                    <img src="media/nu.load.jpg" class="loading-img">
+                </div>
+                <div class="loading-row">
+                    <div class="loading-text">Sie werden jeden moment weitergeleitet</div>
+                </div>
+            </div>
+        `;
+
+        // Rotate animation
+        const loadingImg = loadingPage.querySelector('.loading-img');
+        gsap.to(loadingImg, {
+            rotation: 360,
+            duration: 1,
+            repeat: -1,
+            ease: 'linear'
+        });
+
+        // Set flag that we're going to Instagram
+        sessionStorage.setItem('goingToInsta', 'true');
+        
+        setTimeout(() => {
+            window.location.href = 'https://www.instagram.com/jannik_nu?utm_source=ig_web_button_share_sheet&igsh=MWVhMWk1ODRtcHZ5bA==';
+        }, 2000);
 
         confetti({
             particleCount: 100,
             spread: 70,
             origin: { y: 0.6 }
         });
+    });
+
+    // Check if we were redirected back from Instagram
+    window.addEventListener('pageshow', (event) => {
+        if (event.persisted && sessionStorage.getItem('goingToInsta')) {
+            sessionStorage.removeItem('goingToInsta');
+            sessionStorage.setItem('returningFromInsta', 'true');
+            loadingPage.style.display = 'none';
+        }
     });
 
     const quizQuestions = [
